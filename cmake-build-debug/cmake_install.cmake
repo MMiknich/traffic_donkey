@@ -1,4 +1,4 @@
-# Install script for directory: /home/mmiknich/Study/ProjectMIPT19/traffic_donkey
+# Install script for directory: /home/maria_soroka/MIPT2019/traffic_donkey
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

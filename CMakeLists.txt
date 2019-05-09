@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.12)
 project(traffic_donkey)
 
 set(CMAKE_CXX_STANDARD 14)
 
+include_directories(.)
+
 add_executable(traffic_donkey
-        bibliography.md
-        Gasnikov.pdf
-        README.md
-        техзадание.md main.cpp)
+        main.cpp
+        traffic_model.h)

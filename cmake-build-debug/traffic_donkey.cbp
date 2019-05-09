@@ -8,96 +8,89 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug"/>
+				<Option working_dir="/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug"/>
+				<Option working_dir="/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="traffic_donkey">
-				<Option output="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/traffic_donkey" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0"/>
-					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/x86_64-pc-linux-gnu"/>
-					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include-fixed"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 traffic_donkey"/>
-					<CompileFile command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="traffic_donkey/fast">
-				<Option output="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/traffic_donkey" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug"/>
-				<Option object_output="./"/>
-				<Option type="1"/>
-				<Option compiler="gcc"/>
-				<Compiler>
-					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0"/>
-					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/x86_64-pc-linux-gnu"/>
-					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include-fixed"/>
-					<Add directory="/usr/include"/>
-				</Compiler>
-				<MakeCommands>
-					<Build command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 traffic_donkey/fast"/>
-					<CompileFile command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug"/>
+				<Option working_dir="/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/bin/make -j8 -f &quot;/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="traffic_donkey">
+				<Option output="/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/traffic_donkey" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/maria_soroka/MIPT2019/traffic_donkey/."/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 traffic_donkey"/>
+					<CompileFile command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="traffic_donkey/fast">
+				<Option output="/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/traffic_donkey" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/maria_soroka/MIPT2019/traffic_donkey/."/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/../../../../include/c++/8.3.0/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 traffic_donkey/fast"/>
+					<CompileFile command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/make -j4 -f &quot;/home/maria_soroka/MIPT2019/traffic_donkey/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/Gasnikov.pdf">
+		<Unit filename="/home/maria_soroka/MIPT2019/traffic_donkey/main.cpp">
 			<Option target="traffic_donkey"/>
 		</Unit>
-		<Unit filename="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/README.md">
+		<Unit filename="/home/maria_soroka/MIPT2019/traffic_donkey/traffic_model.h">
 			<Option target="traffic_donkey"/>
 		</Unit>
-		<Unit filename="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/bibliography.md">
-			<Option target="traffic_donkey"/>
-		</Unit>
-		<Unit filename="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/main.cpp">
-			<Option target="traffic_donkey"/>
-		</Unit>
-		<Unit filename="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/техзадание.md">
-			<Option target="traffic_donkey"/>
-		</Unit>
-		<Unit filename="/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/CMakeLists.txt">
+		<Unit filename="/home/maria_soroka/MIPT2019/traffic_donkey/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>
