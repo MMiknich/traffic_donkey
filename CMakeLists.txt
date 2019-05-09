@@ -7,4 +7,4 @@ include_directories(.)
 
 add_executable(traffic_donkey
         main.cpp
-        traffic_model.h)
+        Car.cpp Car.h road.cpp road.h)
