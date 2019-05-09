@@ -1,4 +1,6 @@
-/usr/share/clion-2018.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/mmiknich/Study/ProjectMIPT19/traffic_donkey
--- Configuring done
--- Generating done
--- Build files have been written to: /home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug
+/home/maria_soroka/Documents/clion-2018.2.5/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/maria_soroka/MIPT2019/traffic_donkey
+CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
+  CMake 3.13 or higher is required.  You are running version 3.12.3
+
+
+-- Configuring incomplete, errors occurred!

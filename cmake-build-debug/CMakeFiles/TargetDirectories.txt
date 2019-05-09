@@ -1,3 +1,0 @@
-/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/CMakeFiles/traffic_donkey.dir
-/home/mmiknich/Study/ProjectMIPT19/traffic_donkey/cmake-build-debug/CMakeFiles/edit_cache.dir
