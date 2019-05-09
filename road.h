@@ -28,12 +28,13 @@ public:
     void set_relative_road_id_1(int relative_road_id_1);
     void set_relative_road_id_2(int relative_road_id_2);
     int get_road_id();
-    double get_road_length();
+    double get_length();
     car * get_first_car();
     car * get_last_car();
     bool get_priority();
-    int * get_relative_roads_id();
-    ~road();
+    int get_relative_road_id_1();
+    int get_relative_road_id_2();
+    ~road(){};
 };
 
 
