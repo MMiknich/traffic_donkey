@@ -1,0 +1,1 @@
+/bin/c++  -g   CMakeFiles/traffic_donkey.dir/main.cpp.o  -o traffic_donkey 
