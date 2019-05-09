@@ -23,7 +23,7 @@ using namespace::std;
         void set_car_id(int car_id);
         void set_position_on_the_current_road(double position_on_the_current_road);
         void set_route(vector<int> route);
-        void set_current_road_number_in_the_route(int current_road_id);
+        void set_current_road_number_in_the_route(int current_road_number_in_the_route);
         void set_acceleration(double acceleration);
         void set_velocity(double velocity);
         int get_car_id();
@@ -32,6 +32,7 @@ using namespace::std;
         int get_current_road_number_in_the_route();
         double get_acceleration();
         double get_velocity();
+        ~car(){};
     };
 
 #endif //TRAFFIC_DONKEY_CAR_H
