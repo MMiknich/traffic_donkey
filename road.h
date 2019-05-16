@@ -5,7 +5,7 @@
 #ifndef TRAFFIC_DONKEY_ROAD_H
 #define TRAFFIC_DONKEY_ROAD_H
 
-#include <Car.h>
+#include <car.h>
 
 
 class road {
@@ -24,6 +24,7 @@ public:
     void set_length(double length);
     void set_first_car(car * first_car);
     void set_last_car(car * last_car);
+
     void set_priority(bool priority);
     void set_relative_road_id_1(int relative_road_id_1);
     void set_relative_road_id_2(int relative_road_id_2);
