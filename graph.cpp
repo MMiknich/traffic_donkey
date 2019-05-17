@@ -270,6 +270,9 @@ graph* graph::normalize() {
             }
         }
     }
+
+    for (auto  a : this->graphModel)
+    {}
 }
 
 
