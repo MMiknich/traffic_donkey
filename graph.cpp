@@ -4,7 +4,7 @@
 
 #include "graph.h"
 #include <vector>
-#include <assert.h>
+#include <cassert>
 
 graph::graph(lli *ListS, lli *ListT, double *ListWeight, lli list_size) {
 
@@ -49,8 +49,9 @@ graph::graph(lli *ListS, lli *ListT, double *ListWeight, lli list_size) {
 }
 
 graph* graph::addtoVertex(lli num, edge* edgeptr) {
+    lli gMs = graphModel.size();
     if (this->graphModel.size() <= num)
-        for (int i = 0; i <= num - graphModel.size(); i++) {
+        for (lli i = 0; i <= num - gMs; i++) {
             auto Newvec = new vector<graph::edge *>;
             this->graphModel.push_back(Newvec);
         }
@@ -59,8 +60,9 @@ graph* graph::addtoVertex(lli num, edge* edgeptr) {
 }
 
 graph* graph::addVertex(lli num) {
+    lli gMs = graphModel.size();
     if (this->graphModel.size() <= num)
-        for (int i = 0; i <= num - graphModel.size(); i++) {
+        for (lli i = 0; i <= num - gMs; i++) {
             auto newVec = new vector<graph::edge *>;
             this->graphModel.push_back(newVec);
         }
@@ -213,7 +215,6 @@ road* graph::getRoadptr(lli roadID)
 {
     assert(roadID <= this->roadID_recerved);
 
-    road *output = nullptr;
     for(auto & i : this->graphModel)
         for(auto & a : *i)
             if(a->edgeRoad->get_road_id() == roadID)
@@ -245,24 +246,26 @@ graph* graph::normalize() {
             //building of circle
             this->addEdge(i, Sfirst, STANDARTCIRCLELEN, 1); //give high priority to circle  s->s1
 
-            for(lli j = 0; j < degree - 2; j++) {
-                this->addEdge(oldCapacity + j, oldCapacity + j + 1, STANDARTCIRCLELEN,
-                              1); //building circle -->s_j->s_j+1
-            }
-            this->addEdge(oldCapacity + degree - 2, i, STANDARTCIRCLELEN, 1);// "end" of circle -->s_degree-1 -> s-->s1-->
+            for(lli j = 0; j < degree - 2; j++)
+                this->addEdge(Sfirst + j, Sfirst + j + 1, STANDARTCIRCLELEN, 1); //building circle -->s_j->s_j+1
+
+            this->addEdge(Sfirst + degree - 2, i, STANDARTCIRCLELEN, 1);// "end" of circle -->s_degree-1 -> s-->s1-->
             this->print();
+
             //moving edges
-            for(lli j = 1; j < degree; j++)
+            for(lli j = 0; j < degree - 1; j++)
             {
-                if(this->graphModel[i][j]->roadType == OUTPUT) {
-                    moveEdge(this->graphModel[i][j]->edgeRoad->get_road_id(),
-                            oldCapacity + j - 1,             //S
-                            this->graphModel[i][j]->vertex); //T
+                if(this->graphModel[i]->at(0)->roadType == OUTPUT) {
+                    moveEdge(this->graphModel[i]->at(0)->edgeRoad->get_road_id(),
+                            Sfirst + j,             //S
+                            this->graphModel[i]->at(0)->vertex); //T
+                    print();
                 } else
                 {
-                    moveEdge(this->graphModel[i][j]->edgeRoad->get_road_id(),
-                            this->graphModel[i][j]->vertex, //S
-                            oldCapacity + j - 1);           //T
+                    moveEdge(this->graphModel[i]->at(0)->edgeRoad->get_road_id(),
+                            this->graphModel[i]->at(0)->vertex, //S
+                            Sfirst + j);           //T
+                    print();
                 }
             }
         }
