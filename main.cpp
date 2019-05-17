@@ -3,13 +3,9 @@
 //
 #include <iostream>
 #include "road.h"
-
+#include "car.h"
+#include "traffic_on_one_road.cpp"
 int main()
 {
-    car x;
-    vector<int> route;
-    route.push_back(5);
-    route.push_back(8);
-    x.set_route(route);
-    cout << x.get_route()[0];
+    traffic_on_one_road();
 }
