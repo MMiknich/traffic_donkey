@@ -1,0 +1,273 @@
+//
+// Created by mmiknich on 09.05.19.
+//
+
+#include "graph.h"
+#include <vector>
+#include <assert.h>
+
+graph::graph(lli *ListS, lli *ListT, double *ListWeight, lli list_size) {
+
+    //reserving space
+    lli maxS = ListS[0];
+    for (int i = 0; i < list_size; i++)
+        maxS = maxS > ListS[i] ? maxS : ListS[i];
+
+    lli maxT = ListT[0];
+    for (int i = 0; i < list_size; i++)
+        maxT = maxT > ListT[i] ? maxT : ListT[i];
+
+    this->graphModel.reserve(1 + (maxS > maxT ? maxS : maxT));
+
+
+    for (lli i = 0; i < list_size; i++){
+
+        //Idiot check:
+        assert(ListS[i] != ListT[i]);
+
+        road *rd = new road();
+        rd->set_length(ListWeight[i]);
+        rd->set_road_id(i);
+
+        // adding A->B
+        edge *ed = new edge();
+        ed->roadType = OUTPUT;
+        ed->vertex = ListT[i];
+        ed->edgeRoad = rd;
+
+        this->addtoVertex(ListS[i], ed);
+
+        // adding B<-A
+        ed = new edge();
+        ed->roadType = INPUT;
+        ed->vertex = ListS[i];
+        ed->edgeRoad = rd;
+        this->addtoVertex(ListT[i], ed);
+    }
+
+    this->roadID_recerved = list_size - 1;
+}
+
+graph* graph::addtoVertex(lli num, edge* edgeptr) {
+    if (this->graphModel.size() <= num)
+        for (int i = 0; i <= num - graphModel.size(); i++) {
+            auto Newvec = new vector<graph::edge *>;
+            this->graphModel.push_back(Newvec);
+        }
+    this->graphModel[num]->push_back(edgeptr);
+    return this;
+}
+
+graph* graph::addVertex(lli num) {
+    if (this->graphModel.size() <= num)
+        for (int i = 0; i <= num - graphModel.size(); i++) {
+            auto newVec = new vector<graph::edge *>;
+            this->graphModel.push_back(newVec);
+        }
+    return this;
+}
+
+lli graph::getVertexDegree(lli Vertex_ID) {
+    assert(Vertex_ID < this->graphModel.capacity());
+    return this->graphModel[Vertex_ID]->size();
+}
+
+lli graph::getNumofVertexout(lli Vertex_ID) {
+    lli output = 0;
+    for (auto & i : *this->graphModel[Vertex_ID])
+        if(i->roadType == OUTPUT)
+            output++;
+    return output;
+}
+
+lli graph::getNumofVertexinp(lli Vertex_ID) {
+    lli output = 0;
+    for (auto & i : *this->graphModel[Vertex_ID])
+        if(i->roadType == INPUT)
+            output++;
+    return output;
+}
+
+graph* graph::addEdge(lli S, lli T, road *pRoad) {
+
+    //Idiot check:
+    assert(S != T);
+
+
+    road *rd = pRoad;
+
+    // adding S->T
+    edge *ed = new edge();
+    ed->roadType = OUTPUT;
+    ed->vertex = T;
+    ed->edgeRoad = rd;
+    this->addtoVertex(S, ed);
+
+    // adding T<-S
+    ed = new edge();
+    ed->roadType = INPUT;
+    ed->vertex = S;
+    ed->edgeRoad = rd;
+    this->addtoVertex(T, ed);
+    return this;
+}
+
+graph* graph::addEdge(lli S, lli T, double weight, int priority = 0) {
+
+    //Idiot check:
+    assert(S != T);
+
+        //creating new road class
+    road *rd = new road();
+    rd->set_length(weight);
+    this->roadID_recerved++;
+    rd->set_road_id(this->roadID_recerved);
+    rd->set_priority(priority);
+
+        // adding S->T
+    edge *ed = new edge();
+    ed->roadType = OUTPUT;
+    ed->vertex = T;
+    ed->edgeRoad = rd;
+    this->addtoVertex(S, ed);
+
+        // adding T<-S
+    ed = new edge();
+    ed->roadType = INPUT;
+    ed->vertex = S;
+    ed->edgeRoad = rd;
+    this->addtoVertex(T, ed);
+    return this;
+}
+
+graph* graph::moveEdge(lli S, lli T, lli newS, lli newT) {
+
+    //Dumb check:
+    assert(S != T);
+
+    road *movingRoad = nullptr;
+
+        //Deleting old edge, moving road struct
+    for ( lli i = 0; i < this->graphModel[S]->size(); i++) {
+
+        if (this->graphModel[S]->at(i)->vertex == T) {
+            movingRoad = this->graphModel[S]->at(i)->edgeRoad;
+            free(this->graphModel[S]->at(i));
+            this->graphModel[S]->erase(this->graphModel[S]->begin() + i);
+            break;
+        }
+    }
+    for ( lli i = 0; i < this->graphModel[T]->size(); i++) {
+        if (this->graphModel[T]->at(i)->vertex == S) {
+            free(this->graphModel[T]->at(i));
+            this->graphModel[T]->erase(this->graphModel[T]->begin() + i); //TODO: ПАдает тут
+            break;
+        }
+    }
+
+    assert(movingRoad != nullptr);
+        //creating new edge with old road
+    return this->addEdge(newS, newT, movingRoad);
+}
+
+graph* graph::moveEdge(lli roadID, lli newS, lli newT) {
+
+    //Dumb check:
+    assert(roadID <= this->roadID_recerved);
+    assert(newS != newT);
+
+    pair<lli, lli> inp = this->getEdge(roadID);
+    return moveEdge(inp.first, inp.second, newS, newT);
+}
+
+pair<lli, lli> graph::getEdge(lli roadID) {
+    assert(roadID <= this->roadID_recerved);
+
+    for(int i = 0; i < this->graphModel.size(); i++)
+        for(auto & j : *this->graphModel[i])
+            if(j->edgeRoad->get_road_id() == roadID)
+            {
+                if(j->roadType == OUTPUT)
+                    return {i, j->vertex};
+                else
+                    return {j->vertex, i};
+            }
+    return {-1, -1};
+
+}
+
+lli graph::getRoadID(lli S, lli T) {
+
+    assert(this->graphModel.capacity() + 1 >= S > T ? S : T);
+
+    for (auto & i : *this->graphModel[S])
+        if(i->vertex == T)
+            return i->edgeRoad->get_road_id();
+
+        //in case no such edge
+    return -1;
+
+}
+
+road* graph::getRoadptr(lli roadID)
+{
+    assert(roadID <= this->roadID_recerved);
+
+    road *output = nullptr;
+    for(auto & i : this->graphModel)
+        for(auto & a : *i)
+            if(a->edgeRoad->get_road_id() == roadID)
+                return a->edgeRoad;
+    return nullptr;
+}
+
+void graph::print() {
+    std::cout << this->graphModel.size() << "\n";
+    for (lli j = 0; j < this->graphModel.size(); j++) {
+        std::cout << '[' << j << "]: ";
+        for (auto & i : *this->graphModel[j])
+            std::cout << i->vertex << " " << i->roadType << " | "; //TODO: ТУт тоже падает
+        std::cout << "\n";
+    }
+}
+
+graph* graph::normalize() {
+    for (int i = 0; i < this->graphModel.size(); i++)
+    {
+        lli degree = this->getVertexDegree(i);
+        if (degree > 3)
+        {
+            lli Sfirst = this->graphModel.size();
+
+            //rebuilding of vertex
+            addVertex(Sfirst + degree - 2);  //adding new $(degree)-1 vertexes
+
+            //building of circle
+            this->addEdge(i, Sfirst, STANDARTCIRCLELEN, 1); //give high priority to circle  s->s1
+
+            for(lli j = 0; j < degree - 2; j++) {
+                this->addEdge(oldCapacity + j, oldCapacity + j + 1, STANDARTCIRCLELEN,
+                              1); //building circle -->s_j->s_j+1
+            }
+            this->addEdge(oldCapacity + degree - 2, i, STANDARTCIRCLELEN, 1);// "end" of circle -->s_degree-1 -> s-->s1-->
+            this->print();
+            //moving edges
+            for(lli j = 1; j < degree; j++)
+            {
+                if(this->graphModel[i][j]->roadType == OUTPUT) {
+                    moveEdge(this->graphModel[i][j]->edgeRoad->get_road_id(),
+                            oldCapacity + j - 1,             //S
+                            this->graphModel[i][j]->vertex); //T
+                } else
+                {
+                    moveEdge(this->graphModel[i][j]->edgeRoad->get_road_id(),
+                            this->graphModel[i][j]->vertex, //S
+                            oldCapacity + j - 1);           //T
+                }
+            }
+        }
+    }
+}
+
+
+
