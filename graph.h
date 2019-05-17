@@ -44,6 +44,8 @@ public:
     graph *moveEdge(lli roadID, lli newS, lli newT);
 
     graph *addtoVertex(lli num, edge* edgeptr);
+    graph *addVertex(lli num);
+
 
     lli getRoadID(lli S, lli T);
     road *getRoadptr(lli roadID);
