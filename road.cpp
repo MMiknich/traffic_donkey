@@ -16,7 +16,7 @@ void road::set_road_id(int road_id) {
 void road::set_length(double length) {
         this->length = length;
 }
-void road::set_cars_on_the_road(list<car> cars_on_the_road) {
+void road::set_cars_on_the_road(list<car*> cars_on_the_road) {
     this->cars_on_the_road = cars_on_the_road;
 }
 void road::set_priority(bool priority) {
@@ -37,8 +37,8 @@ int road::get_road_id() {
 double road::get_length() {
     return this->length;
 }
-list<car> road::get_cars_on_the_road() {
-    return this-> cars_on_the_road;
+list<car*> *road::get_cars_on_the_road() {
+    return &(this-> cars_on_the_road);
 }
 bool road::get_priority() {
     return this->priority;

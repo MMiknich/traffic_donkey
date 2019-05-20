@@ -1,6 +1,7 @@
 //
 // Created by mmiknich on 09.05.19.
 //
+#pragma once
 
 #include <vector>
 #include <utility>
@@ -9,8 +10,6 @@
 
 #define SPEEDLIMIT 0
 #define STANDARTCIRCLELEN 15
-#ifndef TRAFFIC_DONKEY_GRAPH_H
-#define TRAFFIC_DONKEY_GRAPH_H
 #define lli long long int
 
 class graph {
@@ -37,7 +36,7 @@ public:
     lli roadID_recerved = 0;
 
     graph(lli *ListS, lli *ListT, double *ListWeight, lli list_size);
-    graph *normalize(); //makes sutable for our model
+    graph *normalize(); //makes suitable for our model
     graph *addEdge(lli S, lli T, road *pRoad);
     graph *addEdge(lli S, lli T, double weight, int priority);//adds edge
     graph *moveEdge(lli S, lli T, lli newS, lli newT);
@@ -62,4 +61,3 @@ public:
 
 };
 
-#endif //TRAFFIC_DONKEY_GRAPH_H
