@@ -9,7 +9,12 @@
 #include "car.h"
 #include <list>
 using namespace std;
-
+struct counting_average_velocities{
+    long double sum;
+    unsigned long long int number_of_counts;
+    double average_speed;
+};
+typedef struct counting_average_velocities counting_average_velocities;
 class road {
     int road_id;
     double length;

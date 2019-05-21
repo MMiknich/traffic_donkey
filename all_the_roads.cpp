@@ -9,31 +9,15 @@
 #define lli long long int
 #define CRITICAL_DISTANCE 0.5
 #define CRITICAL_TIME_TO_MAKE_A_TURN 5.0;
-int main()
+int all_the_roads()
 {
-//   lli A[9] = {0,2,3,1,1,4,3,6,4 };
-//   lli B[9] = {1,1,1,5,6,1,5,5,5 };
-//   double C[9] = {0.5,0.5,0.5,0.5,0.5,0.5,1,1,9};
-//
-//   graph N(A, B, C, 9);
-//   N.print();
-//   N.normalize();
-//    N.print();
-////   N.graphModel.insert(N.graphModel.begin() + 7, N.graphModel[0]);
-//
-//
-//
-//   //N.addEdge(3, 4, 0.5, 0);
-//
-//   //std::vector<int> G = {0};
-//   return 0;
     long long int number_of_edges = 4;
     long long int ListS[4] = {1, 2, 2, 2};
     long long int ListT[4] = {2, 3, 4, 5};
-    double length[4] = {10, 200, 300, 100};
+    double length[4] = {100, 200, 300, 100};
     graph G(ListS, ListT, length, number_of_edges);
     G.normalize();
-    int number_of_cars = 1;
+    int number_of_cars = 2;
     int number_of_cars_reached_destination = 0;
     double delta_t = 0.1;
     double a = 2.0;
@@ -41,6 +25,10 @@ int main()
     double d = 7.5;
     double T = 1;
     double v;
+    long long int number_of_updates = 0;
+    double total_time = 0;
+    double average_time = 0;
+    double sum_time = 0;
     double vel_current;
     double position_current;
     double vel_forward;
@@ -50,23 +38,27 @@ int main()
     double changed_position;
     int changed_road;
     double temp_value;
+    counting_average_velocities average_velocities[G.roadID_recerved + 1];
+    for(int i = 0; i <= G.roadID_recerved; i++){
+        average_velocities[i].sum = 0;
+        average_velocities[i].number_of_counts = 0;
+        //average_velocities[i].average_speed = G.getRoadptr(i)->get_velocity_restrictions();
+        average_velocities[i].average_speed = 16.67;
+    }
     road *r;
     road *next_r;
     vector<pair<int, double>> route_t;
-    //cout << G.getRoadptr(G.getRoadID(6, 7))->get_length() << "\n";
     route_t.push_back(make_pair(G.getRoadID(1, 6), 0));
     route_t.push_back(make_pair(G.getRoadID(6, 7), 0));
     route_t.push_back(make_pair(G.getRoadID(7, 8), 0));
     route_t.push_back(make_pair(G.getRoadID(8, 4), 0));
+    cout << G.getRoadID(1, 6) << " " << G.getRoadID(6, 7) << " " << G.getRoadID(7, 8) << " " << G.getRoadID(8, 4) <<  " " << G.getRoadID(8, 2) << "\n";
     car *one_car= new car(1, 0, route_t, 0,0,0,0,0,0,0,0, 0, 0);
     vector<pair<int, double>> route_t2;
-    //cout << G.getRoadptr(G.getRoadID(6, 7))->get_length() << "\n";
     route_t2.push_back(make_pair(G.getRoadID(2, 6), 0));
     route_t2.push_back(make_pair(G.getRoadID(6, 7), 0));
     route_t2.push_back(make_pair(G.getRoadID(7, 3), 0));
     car *one_car2= new car(2, 0, route_t2, 0,0,0,0,0,0,0,0, 0, 0);
-    cout << one_car->get_route()->front().first;
-    cout << one_car << "sdfgb\n";
     G.getRoadptr(G.getRoadID(1, 6))->set_relative_road_id_1(G.getRoadID(2, 6));
     (G.getRoadptr(G.getRoadID(1, 6))->get_cars_on_the_road())->push_back(one_car);
     (G.getRoadptr(G.getRoadID(2, 6))->get_cars_on_the_road())->push_back(one_car2);
@@ -87,11 +79,11 @@ int main()
 //    };
 //    clock_t start = times(start_times);
     while(number_of_cars_reached_destination != number_of_cars) {
-//      number_of_cars_reached_destination++;
+        total_time += delta_t;
+        number_of_updates++;
         for(long long int edges_iterator = 0; edges_iterator <= G.roadID_recerved; edges_iterator++) {
             r = G.getRoadptr(edges_iterator);
-            //cout << "road_length" << r->get_cars_on_the_road()->empty() << "\n";
-            //r.set_velocity_restrictions(16.67);
+            //r->set_velocity_restrictions(16.67);
             //v = r.get_velocity_restrictions();
             v = 16.67;
             if(r->get_cars_on_the_road()->empty() == 0) {
@@ -113,7 +105,6 @@ int main()
                     head_car->set_changed_velocity(changed_velocity);
                     head_car->set_changed_position_on_the_current_road(changed_position);
                     if(changed_position + CRITICAL_DISTANCE >= r->get_length()) {
-                        //r->get_cars_on_the_road()->pop_front();
                         number_of_cars_reached_destination++;
                         head_car->set_reached_distination(1);
                     }
@@ -136,7 +127,6 @@ int main()
                     temp_value = (d +
                                   (T - ((vel_forward - vel_current) / 2 * a)) * vel_current) /
                                  (position_forward + r->get_length() - position_current);
-                    // printf("current %lf %lf %lf %d\n", head_car->get_position_on_the_current_road(), head_car->get_velocity(), head_car->get_acceleration(), head_car->get_current_road_number_in_the_route());
                     changed_acceleration = a * (1 - vel_current / v - temp_value * temp_value);
                     head_car->set_changed_acceleration(changed_acceleration);
                     changed_velocity = vel_current + delta_t * head_car->get_acceleration();
@@ -145,11 +135,8 @@ int main()
                             delta_t * delta_t * head_car->get_acceleration() / 2;
                     head_car->set_changed_velocity(changed_velocity);
                     head_car->set_changed_position_on_the_current_road(changed_position);
-
-                    //printf("changed %lf %lf %lf\n", changed_position, changed_velocity, changed_acceleration);
                     printf("changed %lf %lf %lf\n", head_car->get_changed_position_on_the_current_road(),
                            head_car->get_changed_velocity(), head_car->get_changed_acceleration());
-                    //cout << r->get_length() << "\n";
                     if(changed_position + CRITICAL_DISTANCE >= r->get_length()) {
                         head_car->set_changed_current_road_number_in_the_route(
                                 head_car->get_current_road_number_in_the_route() + 1);
@@ -175,12 +162,12 @@ int main()
                     head_car->set_changed_velocity(changed_velocity);
                     head_car->set_changed_position_on_the_current_road(changed_position);
                     if(changed_position + CRITICAL_DISTANCE >= r->get_length()){
-
                         if(G.getRoadptr(r->get_relative_road_id_1())->get_cars_on_the_road()->empty() == 0) {
                             car *car_to_wait = G.getRoadptr(r->get_relative_road_id_1())->get_cars_on_the_road()->front();
+                            next_r = G.getRoadptr((*head_car->get_route())[head_car->get_current_road_number_in_the_route() + 1].first);
                             double time_for_a_turn = ((G.getRoadptr(r->get_relative_road_id_1()))->get_length() -
                                                       car_to_wait->get_position_on_the_current_road() )/ car_to_wait->get_velocity();
-                            if(5.0 < time_for_a_turn) {
+                            if(5.0 < time_for_a_turn && next_r->get_cars_on_the_road()->back()->get_position_on_the_current_road() > 5) {
                                 head_car->set_changed_current_road_number_in_the_route(
                                         head_car->get_current_road_number_in_the_route() + 1);
                                 head_car->set_changed_position_on_the_current_road(
@@ -188,7 +175,6 @@ int main()
                             }
                         }
                         else{
-                            //cout<< "sdf\n";
                             head_car->set_changed_current_road_number_in_the_route(
                                     head_car->get_current_road_number_in_the_route() + 1);
                             head_car->set_changed_position_on_the_current_road(
@@ -214,7 +200,6 @@ int main()
                     temp_value = (d +
                                   (T - ((vel_forward - vel_current) / 2 * a)) * vel_current) /
                                  (position_forward + r->get_length() - position_current);
-                    // printf("current %lf %lf %lf %d\n", head_car->get_position_on_the_current_road(), head_car->get_velocity(), head_car->get_acceleration(), head_car->get_current_road_number_in_the_route());
                     changed_acceleration = a * (1 - vel_current / v - temp_value * temp_value);
                     head_car->set_changed_acceleration(changed_acceleration);
                     changed_velocity = vel_current + delta_t * head_car->get_acceleration();
@@ -223,11 +208,6 @@ int main()
                             delta_t * delta_t * head_car->get_acceleration() / 2;
                     head_car->set_changed_velocity(changed_velocity);
                     head_car->set_changed_position_on_the_current_road(changed_position);
-
-                    //printf("changed %lf %lf %lf\n", changed_position, changed_velocity, changed_acceleration);
-                    //printf("changed %lf %lf %lf\n", head_car->get_changed_position_on_the_current_road(),
-                    //     head_car->get_changed_velocity(), head_car->get_changed_acceleration());
-                    //cout << r->get_length() << "\n";
                     if(changed_position + CRITICAL_DISTANCE >= r->get_length()) {
                         head_car->set_changed_current_road_number_in_the_route(
                                 head_car->get_current_road_number_in_the_route() + 1);
@@ -253,7 +233,6 @@ int main()
                     temp_value = (d +
                                   (T - ((vel_forward - vel_current) / 2 * a)) * vel_current) /
                                  (position_forward + r->get_length() - position_current);
-                    // printf("current %lf %lf %lf %d\n", head_car->get_position_on_the_current_road(), head_car->get_velocity(), head_car->get_acceleration(), head_car->get_current_road_number_in_the_route());
                     changed_acceleration = a * (1 - vel_current / v - temp_value * temp_value);
                     head_car->set_changed_acceleration(changed_acceleration);
                     changed_velocity = vel_current + delta_t * head_car->get_acceleration();
@@ -262,11 +241,6 @@ int main()
                             delta_t * delta_t * head_car->get_acceleration() / 2;
                     head_car->set_changed_velocity(changed_velocity);
                     head_car->set_changed_position_on_the_current_road(changed_position);
-
-                    //printf("changed %lf %lf %lf\n", changed_position, changed_velocity, changed_acceleration);
-                    //printf("changed %lf %lf %lf\n", head_car->get_changed_position_on_the_current_road(),
-                    //       head_car->get_changed_velocity(), head_car->get_changed_acceleration());
-                    //cout << r->get_length() << "\n";
                     if(changed_position + CRITICAL_DISTANCE >= r->get_length()) {
                         head_car->set_changed_current_road_number_in_the_route(
                                 head_car->get_current_road_number_in_the_route() + 1);
@@ -298,8 +272,6 @@ int main()
                     }
                 }
             }
-
-//         printf("%lf %lf %lf %d\n", one_car.get_position_on_the_current_road(), one_car.get_velocity(), one_car.get_acceleration(), one_car.get_current_road_number_in_the_route());
         }
         for(long long int edges_iterator = 0; edges_iterator <= G.roadID_recerved; edges_iterator++) {
             r = G.getRoadptr(edges_iterator);
@@ -307,7 +279,6 @@ int main()
                 auto it = r->get_cars_on_the_road()->begin();
                 if((*it)->get_changed_current_road_number_in_the_route() !=
                    (*it)->get_current_road_number_in_the_route()) {
-                    cout << "try to  change\n";
                     next_r = G.getRoadptr(
                             (*(*it)->get_route())[(*it)->get_current_road_number_in_the_route() + 1].first);
                     next_r->get_cars_on_the_road()->push_back(*it);
@@ -315,11 +286,9 @@ int main()
                 }
                 else if((*it)->get_reached_distination() == 1) {
                     r->get_cars_on_the_road()->pop_front();
+                    sum_time += total_time;
                 }
                 (*it)->update_car();
-                //printf("ready to update %lf %lf %lf %d\n", (*it)->get_position_on_the_current_road(),
-                //  (*it)->get_velocity(),
-                // (*it)->get_acceleration(), (*it)->get_changed_current_road_number_in_the_route());
             }
         }
         for(long long int edges_iterator = 0; edges_iterator <= G.roadID_recerved; edges_iterator++) {
@@ -328,12 +297,28 @@ int main()
                 auto it = r->get_cars_on_the_road()->begin();
                 for(it; it != r->get_cars_on_the_road()->end(); it++) {
                     (*it)->update_car();
-                    printf("ready to update %d %lf %lf %lf %d\n", (*it)->get_car_id(), (*it)->get_position_on_the_current_road(),
+                    if(number_of_updates % 10 == 0){
+                        average_velocities[edges_iterator].sum += (*it)->get_velocity();
+                        average_velocities[edges_iterator].number_of_counts++;
+                    }
+                    printf("%d %lf %lf %lf %d\n", (*it)->get_car_id(), (*it)->get_position_on_the_current_road(),
                            (*it)->get_velocity(),
                            (*it)->get_acceleration(), (*it)->get_changed_current_road_number_in_the_route());
                 }
             }
         }
+
+    }
+    for(int i = 0; i <= G.roadID_recerved; i++){
+        //printf("%d %lf \n", i, average_velocities[i].average_speed);
+        if(average_velocities[i].number_of_counts != 0){
+            average_velocities[i].average_speed = average_velocities[i].sum / average_velocities[i].number_of_counts;
+            //printf("%d ", i);
+        }
+        printf("%d %lf \n", i, average_velocities[i].average_speed);
     }
     delete(one_car);
+    average_time = sum_time / number_of_cars;
+    printf("average_time %lf\n", average_time);
+    return 0;
 }
