@@ -5,6 +5,7 @@
 #include "graph.h"
 #include <vector>
 #include <cassert>
+#include <limits>
 
 graph::graph(lli *ListS, lli *ListT, double *ListWeight, lli list_size) {
 
@@ -250,7 +251,6 @@ graph* graph::normalize() {
                 this->addEdge(Sfirst + j, Sfirst + j + 1, STANDARTCIRCLELEN, 1); //building circle -->s_j->s_j+1
 
             this->addEdge(Sfirst + degree - 2, i, STANDARTCIRCLELEN, 1);// "end" of circle -->s_degree-1 -> s-->s1-->
-            this->print();
 
             //moving edges
             for(lli j = 0; j < degree - 1; j++)
@@ -259,21 +259,159 @@ graph* graph::normalize() {
                     moveEdge(this->graphModel[i]->at(0)->edgeRoad->get_road_id(),
                             Sfirst + j,             //S
                             this->graphModel[i]->at(0)->vertex); //T
-                    print();
                 } else
                 {
                     moveEdge(this->graphModel[i]->at(0)->edgeRoad->get_road_id(),
                             this->graphModel[i]->at(0)->vertex, //S
                             Sfirst + j);           //T
-                    print();
                 }
             }
         }
     }
 
-    for (auto  a : this->graphModel)
-    {}
+    // for 3degree
+
+    for (int i = 0; i < this->graphModel.size(); i++)
+    {
+        lli degree = this->getVertexDegree(i);
+        if (degree == 3 && this->graphModel.at(i)->at(0)->edgeRoad->get_priority() == 0
+                           && this->graphModel.at(i)->at(1)->edgeRoad->get_priority() == 0
+                              && this->graphModel.at(i)->at(2)->edgeRoad->get_priority() == 0)
+        {
+            {
+                lli Sfirst = this->graphModel.size();
+
+                //rebuilding of vertex
+                addVertex(Sfirst + degree - 2);  //adding new $(degree)-1 vertexes
+
+                //building of circle
+                this->addEdge(i, Sfirst, STANDARTCIRCLELEN, 1); //give high priority to circle  s->s1
+
+                for(lli j = 0; j < degree - 2; j++)
+                    this->addEdge(Sfirst + j, Sfirst + j + 1, STANDARTCIRCLELEN, 1); //building circle -->s_j->s_j+1
+
+                this->addEdge(Sfirst + degree - 2, i, STANDARTCIRCLELEN, 1);// "end" of circle -->s_degree-1 -> s-->s1-->
+
+                //moving edges
+                for(lli j = 0; j < degree - 1; j++)
+                {
+                    if(this->graphModel[i]->at(0)->roadType == OUTPUT) {
+                        moveEdge(this->graphModel[i]->at(0)->edgeRoad->get_road_id(),
+                                 Sfirst + j,             //S
+                                 this->graphModel[i]->at(0)->vertex); //T
+                    } else
+                    {
+                        moveEdge(this->graphModel[i]->at(0)->edgeRoad->get_road_id(),
+                                 this->graphModel[i]->at(0)->vertex, //S
+                                 Sfirst + j);           //T
+                    }
+                }
+            }
+        }
+    }
+
+
+    //adding reletive roads
+
+    for (auto  vertex : this->graphModel)
+    {
+        if(vertex->size() == 3)
+        {
+            int lowP_ID = 0;
+            for(int i = 0; i < 3; i++) lowP_ID = (vertex->at(i)->edgeRoad->get_priority() == 0 ? i : lowP_ID); //find low preor id
+            int inpHP = 0;
+            inpHP = vertex->at((lowP_ID + 1) % 3)->roadType == INPUT ? (lowP_ID + 1) % 3 : (lowP_ID + 2) % 3;
+
+            if (vertex->at(lowP_ID)->roadType == INPUT)
+            {
+                vertex->at(lowP_ID)->edgeRoad->set_relative_road_id_1(inpHP);
+                vertex->at(lowP_ID)->edgeRoad->set_relative_road_id_2(-1);
+            }
+        }
+        if(vertex->size() == 2)
+        {
+            vertex->at(0)->edgeRoad->set_relative_road_id_1(-1);
+            vertex->at(0)->edgeRoad->set_relative_road_id_2(-1);
+            vertex->at(1)->edgeRoad->set_relative_road_id_1(-1);
+            vertex->at(1)->edgeRoad->set_relative_road_id_2(-1);
+        }
+
+    }
 }
+
+double graph::getWeight(int roadID, counting_average_velocities *cav) {
+    assert(roadID >= this->roadID_recerved);
+    double lenght = this->getRoadptr(roadID)->get_length();
+    double avrSpeed = cav[roadID].average_speed;
+    return (lenght * avrSpeed);
+}
+
+std::vector<lli> graph::findWay(int roadID_S, int roadID_T, counting_average_velocities *cav) {
+
+    assert(roadID_S <= this->roadID_recerved && roadID_T <= this->roadID_recerved);
+
+    lli S_point = this->getEdge(roadID_S).first; //start point
+    lli T_point = this->getEdge(roadID_T).second; //end point
+
+    std::vector<bool> visitedVert(this->graphModel.size()); //vector of visited Vertexes
+    std::vector<double> minLen(this->graphModel.size());    //vector of len from S to i
+    std::vector<std::vector<lli>> ways(this->graphModel.size()); //vector of ways
+
+    // cleaning space
+    for (auto &&i : visitedVert) i = false;
+    for (auto &&a : minLen) a =  std::numeric_limits<double>::max();
+    for (auto a : ways ) a.clear();
+    // --------------
+
+    //filling starting information
+    for (auto a : *this->graphModel.at(S_point)) {
+        minLen[a->vertex] = this->getWeight(a->edgeRoad->get_road_id(), cav);
+        ways[a->vertex].push_back(a->edgeRoad->get_road_id());
+    }
+
+    visitedVert[S_point] = true;
+    minLen[S_point] = 0;
+
+
+    lli gSize = this->graphModel.size();
+
+    for (int i = 1; i < gSize; i++) {
+
+        lli nextVertex = -1;
+        double minWeght =  std::numeric_limits<double>::max();
+
+
+        /// --------------------
+        for (auto j = 0; j < gSize; j++) {
+            if (!visitedVert[j] && minWeght <= minLen[j]) {
+                minWeght = minLen[j];
+                nextVertex = j;
+            }
+        }
+        /// Found the next vertex
+
+        visitedVert[nextVertex] = true;
+        for (auto j = 0; j < this->graphModel[nextVertex]->size(); j++)
+        {
+            if(minLen.at(this->graphModel[nextVertex]->at(j)->vertex) > (minLen[nextVertex] +
+            this->getWeight(this->graphModel[nextVertex]->at(j)->edgeRoad->get_road_id(), cav)))
+            {
+                minLen.at(this->graphModel[nextVertex]->at(j)->vertex) =
+                        minLen[nextVertex] +
+                        this->getWeight(this->graphModel[nextVertex]->at(j)->edgeRoad->get_road_id(), cav);
+
+                ways[this->graphModel[nextVertex]->at(j)->vertex].clear();
+                ways[this->graphModel[nextVertex]->at(j)->vertex] = ways[nextVertex];
+                ways[this->graphModel[nextVertex]->at(j)->vertex].push_back(this->graphModel[nextVertex]->at(j)->edgeRoad->get_road_id());
+            }
+        }
+    }
+
+    return ways[T_point];
+
+}
+
+
 
 
 

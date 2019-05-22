@@ -7,6 +7,7 @@
 #include <utility>
 #include <iostream>
 #include "road.h"
+#include "car.h"
 
 #define SPEEDLIMIT 0
 #define STANDARTCIRCLELEN 15
@@ -55,6 +56,8 @@ public:
     lli getVertexDegree(lli Vertex_ID); // counts vertex degree
     lli getNumofVertexout(lli Vertex_ID); // counts number of outer edges
     lli getNumofVertexinp(lli Vertex_ID); // counts number of inter edges
+    std::vector<lli> findWay(int roadID_S, int roadID_T, counting_average_velocities *cav); // no waaaay
+    double getWeight( int roadID, counting_average_velocities *cav);  //size is G.roadID_received + 1
 
 
 

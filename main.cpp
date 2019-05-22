@@ -12,24 +12,25 @@
 extern int all_the_roads();
 int main()
 {
-    all_the_roads();
+   lli A[10] = {0,2,3,1,1,4,3,6,4, 3 };
+   lli B[10] = {1,1,1,5,6,1,5,5,5, 4 };
+   double C[10] = {0.5,0.5,0.5,0.5,0.5,0.5,1,1,9,8};
+
+   graph N(A, B, C, 10);
+   //N.print();
+   N.normalize();
+    N.print();
+    lli G[18] = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,  10, 10, 10, 10, 10,  10, 10, 10};
+    N.findWay(0, 15, G);
+//   N.graphModel.insert(N.graphModel.begin() + 7, N.graphModel[0]);
+
+
+
+   //N.addEdge(3, 4, 0.5, 0);
+
+   //std::vector<int> G = {0};
+   return 0 ;
 }
-////   lli A[9] = {0,2,3,1,1,4,3,6,4 };
-////   lli B[9] = {1,1,1,5,6,1,5,5,5 };
-////   double C[9] = {0.5,0.5,0.5,0.5,0.5,0.5,1,1,9};
-////
-////   graph N(A, B, C, 9);
-////   N.print();
-////   N.normalize();
-////    N.print();
-//////   N.graphModel.insert(N.graphModel.begin() + 7, N.graphModel[0]);
-////
-////
-////
-////   //N.addEdge(3, 4, 0.5, 0);
-////
-////   //std::vector<int> G = {0};
-////   return 0;
 //   long long int number_of_edges = 4;
 //   long long int ListS[4] = {1, 2, 2, 2};
 //   long long int ListT[4] = {2, 3, 4, 5};
