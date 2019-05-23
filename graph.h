@@ -10,7 +10,7 @@
 #include "car.h"
 
 #define SPEEDLIMIT 0
-#define STANDARTCIRCLELEN 5
+#define STANDARTCIRCLELEN 15
 #define lli long long int
 
 class graph {
