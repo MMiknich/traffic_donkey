@@ -9,15 +9,8 @@
 #define lli long long int
 #define CRITICAL_DISTANCE 0.5
 #define CRITICAL_TIME_TO_MAKE_A_TURN 5.0;
-int all_the_roads()
+double all_the_roads(int number_of_cars, graph * G, counting_average_velocities * average_velocities)
 {
-    long long int number_of_edges = 4;
-    long long int ListS[4] = {1, 2, 2, 2};
-    long long int ListT[4] = {2, 3, 4, 5};
-    double length[4] = {100, 200, 300, 100};
-    graph G(ListS, ListT, length, number_of_edges);
-    G.normalize();
-    int number_of_cars = 2;
     int number_of_cars_reached_destination = 0;
     double delta_t = 0.1;
     double a = 2.0;
@@ -36,32 +29,26 @@ int all_the_roads()
     double changed_acceleration;
     double changed_velocity;
     double changed_position;
-    int changed_road;
     double temp_value;
-    counting_average_velocities average_velocities[G.roadID_recerved + 1];
-    for(int i = 0; i <= G.roadID_recerved; i++){
-        average_velocities[i].sum = 0;
-        average_velocities[i].number_of_counts = 0;
-        //average_velocities[i].average_speed = G.getRoadptr(i)->get_velocity_restrictions();
-        average_velocities[i].average_speed = 16.67;
-    }
+
     road *r;
     road *next_r;
-    vector<pair<int, double>> route_t;
-    route_t.push_back(make_pair(G.getRoadID(1, 6), 0));
-    route_t.push_back(make_pair(G.getRoadID(6, 7), 0));
-    route_t.push_back(make_pair(G.getRoadID(7, 8), 0));
-    route_t.push_back(make_pair(G.getRoadID(8, 4), 0));
-    cout << G.getRoadID(1, 6) << " " << G.getRoadID(6, 7) << " " << G.getRoadID(7, 8) << " " << G.getRoadID(8, 4) <<  " " << G.getRoadID(8, 2) << "\n";
-    car *one_car= new car(1, 0, route_t, 0,0,0,0,0,0,0,0, 0, 0);
-    vector<pair<int, double>> route_t2;
-    route_t2.push_back(make_pair(G.getRoadID(2, 6), 0));
-    route_t2.push_back(make_pair(G.getRoadID(6, 7), 0));
-    route_t2.push_back(make_pair(G.getRoadID(7, 3), 0));
-    car *one_car2= new car(2, 0, route_t2, 0,0,0,0,0,0,0,0, 0, 0);
-    G.getRoadptr(G.getRoadID(1, 6))->set_relative_road_id_1(G.getRoadID(2, 6));
-    (G.getRoadptr(G.getRoadID(1, 6))->get_cars_on_the_road())->push_back(one_car);
-    (G.getRoadptr(G.getRoadID(2, 6))->get_cars_on_the_road())->push_back(one_car2);
+
+//    vector<pair<int, double>> route_t;
+//    route_t.push_back(make_pair(G.getRoadID(1, 6), 0));
+//    route_t.push_back(make_pair(G.getRoadID(6, 7), 0));
+//    route_t.push_back(make_pair(G.getRoadID(7, 8), 0));
+//    route_t.push_back(make_pair(G.getRoadID(8, 4), 0));
+//    cout << G.getRoadID(1, 6) << " " << G.getRoadID(6, 7) << " " << G.getRoadID(7, 8) << " " << G.getRoadID(8, 4) <<  " " << G.getRoadID(8, 2) << "\n";
+//    car *one_car= new car(1, 0, route_t, 0,0,0,0,0,0,0,0, 0, 0);
+//    vector<pair<int, double>> route_t2;
+//    route_t2.push_back(make_pair(G.getRoadID(2, 6), 0));
+//    route_t2.push_back(make_pair(G.getRoadID(6, 7), 0));
+//    route_t2.push_back(make_pair(G.getRoadID(7, 3), 0));
+//    car *one_car2= new car(2, 0, route_t2, 0,0,0,0,0,0,0,0, 0, 0);
+//    G.getRoadptr(G.getRoadID(1, 6))->set_relative_road_id_1(G.getRoadID(2, 6));
+//    (G.getRoadptr(G.getRoadID(1, 6))->get_cars_on_the_road())->push_back(one_car);
+//    (G.getRoadptr(G.getRoadID(2, 6))->get_cars_on_the_road())->push_back(one_car2);
 //    FILE * file;
 //    file = fopen("out.txt", "w+");
 //    list<car> cars_on_the_road;
@@ -81,8 +68,8 @@ int all_the_roads()
     while(number_of_cars_reached_destination != number_of_cars) {
         total_time += delta_t;
         number_of_updates++;
-        for(long long int edges_iterator = 0; edges_iterator <= G.roadID_recerved; edges_iterator++) {
-            r = G.getRoadptr(edges_iterator);
+        for(long long int edges_iterator = 0; edges_iterator <= G->roadID_recerved; edges_iterator++) {
+            r = G->getRoadptr(edges_iterator);
             //r->set_velocity_restrictions(16.67);
             //v = r.get_velocity_restrictions();
             v = 16.67;
@@ -111,11 +98,11 @@ int all_the_roads()
                 }
                 else if(r->get_priority() == 0 &&    //this road is NOT the last one, current road priority is 0 and priority of the next road is also 0
                         head_car->get_current_road_number_in_the_route() != head_car->get_route()->size() - 1 &&
-                        (G.getRoadptr(((*head_car->get_route())[head_car->get_current_road_number_in_the_route() +
-                                                                1]).first))->get_priority() == 0) {
+                        (G->getRoadptr(((*head_car->get_route())[head_car->get_current_road_number_in_the_route() +
+                                                                1])))->get_priority() == 0) {
                     vel_current = head_car->get_velocity();
                     position_current = head_car->get_position_on_the_current_road();
-                    next_r = G.getRoadptr((*head_car->get_route())[head_car->get_current_road_number_in_the_route() + 1].first);
+                    next_r = G->getRoadptr((*head_car->get_route())[head_car->get_current_road_number_in_the_route() + 1]);
                     if(next_r->get_cars_on_the_road()->empty() == 0) {
                         vel_forward = (*next_r->get_cars_on_the_road()->back()).get_velocity();
                         position_forward = (*next_r->get_cars_on_the_road()->back()).get_position_on_the_current_road();
@@ -145,7 +132,7 @@ int all_the_roads()
                     }
                 }
                 else if(r->get_priority() == 0 && head_car->get_current_road_number_in_the_route() != head_car->get_route()->size() - 1 && //if head_car is NOT last road, current road priority is 0 and next road priority is 1
-                        (G.getRoadptr((*head_car->get_route())[head_car->get_current_road_number_in_the_route() + 1].first))->get_priority() == 1){
+                        (G->getRoadptr((*head_car->get_route())[head_car->get_current_road_number_in_the_route() + 1]))->get_priority() == 1){
                     vel_current = head_car->get_velocity();
                     position_current = head_car->get_position_on_the_current_road();
                     vel_forward = 0;
@@ -162,16 +149,27 @@ int all_the_roads()
                     head_car->set_changed_velocity(changed_velocity);
                     head_car->set_changed_position_on_the_current_road(changed_position);
                     if(changed_position + CRITICAL_DISTANCE >= r->get_length()){
-                        if(G.getRoadptr(r->get_relative_road_id_1())->get_cars_on_the_road()->empty() == 0) {
-                            car *car_to_wait = G.getRoadptr(r->get_relative_road_id_1())->get_cars_on_the_road()->front();
-                            next_r = G.getRoadptr((*head_car->get_route())[head_car->get_current_road_number_in_the_route() + 1].first);
-                            double time_for_a_turn = ((G.getRoadptr(r->get_relative_road_id_1()))->get_length() -
+                        if(G->getRoadptr(r->get_relative_road_id_1())->get_cars_on_the_road()->empty() == 0) {
+                            car *car_to_wait = G->getRoadptr(r->get_relative_road_id_1())->get_cars_on_the_road()->front();
+                            next_r = G->getRoadptr((*head_car->get_route())[head_car->get_current_road_number_in_the_route() + 1]);
+                            double time_for_a_turn = ((G->getRoadptr(r->get_relative_road_id_1()))->get_length() -
                                                       car_to_wait->get_position_on_the_current_road() )/ car_to_wait->get_velocity();
-                            if(5.0 < time_for_a_turn && next_r->get_cars_on_the_road()->back()->get_position_on_the_current_road() > 5) {
-                                head_car->set_changed_current_road_number_in_the_route(
-                                        head_car->get_current_road_number_in_the_route() + 1);
-                                head_car->set_changed_position_on_the_current_road(
-                                        head_car->get_changed_position_on_the_current_road() - r->get_length());
+                            if(next_r->get_cars_on_the_road()->empty() == 0) {
+                                if(5.0 < time_for_a_turn &&
+                                   next_r->get_cars_on_the_road()->back()->get_position_on_the_current_road() > 5) {
+                                    head_car->set_changed_current_road_number_in_the_route(
+                                            head_car->get_current_road_number_in_the_route() + 1);
+                                    head_car->set_changed_position_on_the_current_road(
+                                            head_car->get_changed_position_on_the_current_road() - r->get_length());
+                                }
+                            }
+                            else{
+                                if(5.0 < time_for_a_turn) {
+                                    head_car->set_changed_current_road_number_in_the_route(
+                                            head_car->get_current_road_number_in_the_route() + 1);
+                                    head_car->set_changed_position_on_the_current_road(
+                                            head_car->get_changed_position_on_the_current_road() - r->get_length());
+                                }
                             }
                         }
                         else{
@@ -184,11 +182,11 @@ int all_the_roads()
                 }
                 else if(r->get_priority() == 1 &&    //this road is NOT the last one, current road priority is 1 and priority of the next road is also 1
                         head_car->get_current_road_number_in_the_route() != head_car->get_route()->size() - 1 &&
-                        (G.getRoadptr(((*head_car->get_route())[head_car->get_current_road_number_in_the_route() +
-                                                                1]).first))->get_priority() == 1) {
+                        (G->getRoadptr(((*head_car->get_route())[head_car->get_current_road_number_in_the_route() +
+                                                                1])))->get_priority() == 1) {
                     vel_current = head_car->get_velocity();
                     position_current = head_car->get_position_on_the_current_road();
-                    next_r = G.getRoadptr((*head_car->get_route())[head_car->get_current_road_number_in_the_route() + 1].first);
+                    next_r = G->getRoadptr((*head_car->get_route())[head_car->get_current_road_number_in_the_route() + 1]);
                     if(next_r->get_cars_on_the_road()->empty() == 0) {
                         vel_forward = (*next_r->get_cars_on_the_road()->back()).get_velocity();
                         position_forward = (*next_r->get_cars_on_the_road()->back()).get_position_on_the_current_road();
@@ -217,11 +215,11 @@ int all_the_roads()
                 }
                 else if(r->get_priority() == 1 &&    //this road is NOT the last one, current road priority is 1 and priority of the next road is also 1
                         head_car->get_current_road_number_in_the_route() != head_car->get_route()->size() - 1 &&
-                        (G.getRoadptr(((*head_car->get_route())[head_car->get_current_road_number_in_the_route() +
-                                                                1]).first))->get_priority() == 0) {
+                        (G->getRoadptr(((*head_car->get_route())[head_car->get_current_road_number_in_the_route() +
+                                                                1])))->get_priority() == 0) {
                     vel_current = head_car->get_velocity();
                     position_current = head_car->get_position_on_the_current_road();
-                    next_r = G.getRoadptr((*head_car->get_route())[head_car->get_current_road_number_in_the_route() + 1].first);
+                    next_r = G->getRoadptr((*head_car->get_route())[head_car->get_current_road_number_in_the_route() + 1]);
                     if(next_r->get_cars_on_the_road()->empty() == 0) {
                         vel_forward = (*next_r->get_cars_on_the_road()->back()).get_velocity();
                         position_forward = (*next_r->get_cars_on_the_road()->back()).get_position_on_the_current_road();
@@ -273,14 +271,15 @@ int all_the_roads()
                 }
             }
         }
-        for(long long int edges_iterator = 0; edges_iterator <= G.roadID_recerved; edges_iterator++) {
-            r = G.getRoadptr(edges_iterator);
+        //cout << " " << one_car->get_changed_position_on_the_current_road() << " " << one_car->get_current_road_number_in_the_route() << " " << one_car->get_changed_current_road_number_in_the_route() << "\n";
+        for(long long int edges_iterator = 0; edges_iterator <= G->roadID_recerved; edges_iterator++) {
+            r = G->getRoadptr(edges_iterator);
             if(r->get_cars_on_the_road()->empty() == 0) {
                 auto it = r->get_cars_on_the_road()->begin();
                 if((*it)->get_changed_current_road_number_in_the_route() !=
                    (*it)->get_current_road_number_in_the_route()) {
-                    next_r = G.getRoadptr(
-                            (*(*it)->get_route())[(*it)->get_current_road_number_in_the_route() + 1].first);
+                    next_r = G->getRoadptr(
+                            (*(*it)->get_route())[(*it)->get_current_road_number_in_the_route() + 1]);
                     next_r->get_cars_on_the_road()->push_back(*it);
                     r->get_cars_on_the_road()->pop_front();
                 }
@@ -291,8 +290,8 @@ int all_the_roads()
                 (*it)->update_car();
             }
         }
-        for(long long int edges_iterator = 0; edges_iterator <= G.roadID_recerved; edges_iterator++) {
-            r = G.getRoadptr(edges_iterator);
+        for(long long int edges_iterator = 0; edges_iterator <= G->roadID_recerved; edges_iterator++) {
+            r = G->getRoadptr(edges_iterator);
             if(r->get_cars_on_the_road()->empty() == 0) {
                 auto it = r->get_cars_on_the_road()->begin();
                 for(it; it != r->get_cars_on_the_road()->end(); it++) {
@@ -309,16 +308,16 @@ int all_the_roads()
         }
 
     }
-    for(int i = 0; i <= G.roadID_recerved; i++){
+    for(int i = 0; i <= G->roadID_recerved; i++){
         //printf("%d %lf \n", i, average_velocities[i].average_speed);
         if(average_velocities[i].number_of_counts != 0){
             average_velocities[i].average_speed = average_velocities[i].sum / average_velocities[i].number_of_counts;
             //printf("%d ", i);
         }
-        printf("%d %lf \n", i, average_velocities[i].average_speed);
+        //printf("%d %lf \n", i, average_velocities[i].average_speed);
     }
-    delete(one_car);
+    //delete(one_car);
     average_time = sum_time / number_of_cars;
     printf("average_time %lf\n", average_time);
-    return 0;
+    return average_time;
 }

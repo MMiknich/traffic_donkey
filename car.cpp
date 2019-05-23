@@ -9,7 +9,7 @@ using namespace std;
 car::car(){
     car_id = -1;
     position_on_the_current_road = 0;
-    vector<pair<int, double>> route;
+    vector<long long int> route;
     current_road_number_in_the_route = -1;
     acceleration = 0;
     velocity = 0;
@@ -27,7 +27,7 @@ void car::set_car_id(int car_id){
 void car::set_position_on_the_current_road(double position_on_the_current_road){
     this->position_on_the_current_road = position_on_the_current_road;
 }
-void car::set_route(vector<pair<int, double>> route){
+void car::set_route(vector<long long int> route){
     this->route = route;
 }
 void car::set_current_road_number_in_the_route(int current_road_number_in_the_route){
@@ -66,7 +66,7 @@ int car::get_car_id(){
 double car::get_position_on_the_current_road(){
     return this->position_on_the_current_road;
 }
-vector<pair<int, double>> *car::get_route(){
+vector<long long int> *car::get_route(){
     return &(this->route);
 }
 int car::get_current_road_number_in_the_route(){

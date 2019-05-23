@@ -9,7 +9,7 @@ using namespace::std;
     class car{
         int car_id; // car individual number
         double position_on_the_current_road;
-        vector<pair<int, double>> route;
+        vector<long long int> route;
         int current_road_number_in_the_route;
         double acceleration;
         double velocity;
@@ -22,15 +22,15 @@ using namespace::std;
         int finish;
     public:
         car();
-        car(int car_id, double position_on_the_current_road, vector<pair<int, double>> route, int current_road_number_in_the_route, double acceleration, double velocity,
+        car(int car_id, double position_on_the_current_road, int current_road_number_in_the_route, double acceleration, double velocity,
             double changed_position_on_the_current_road, int changed_current_road_number_in_the_route, double changed_acceleration, double changed_velocity, bool reached_destination, int start, int finish):
-                car_id(car_id), position_on_the_current_road(position_on_the_current_road), route(route), current_road_number_in_the_route(current_road_number_in_the_route),
+                car_id(car_id), position_on_the_current_road(position_on_the_current_road), current_road_number_in_the_route(current_road_number_in_the_route),
                 acceleration(acceleration), velocity(velocity), changed_position_on_the_current_road(changed_position_on_the_current_road),
                         changed_current_road_number_in_the_route(changed_current_road_number_in_the_route), changed_acceleration(changed_acceleration), changed_velocity(changed_velocity), reached_destination(reached_destination),
                         start(start), finish(finish){};
         void set_car_id(int car_id);
         void set_position_on_the_current_road(double position_on_the_current_road);
-        void set_route(vector<pair<int, double>> route);
+        void set_route(vector<long long int> route);
         void set_current_road_number_in_the_route(int current_road_number_in_the_route);
         void set_acceleration(double acceleration);
         void set_velocity(double velocity);
@@ -45,7 +45,7 @@ using namespace::std;
 
         int get_car_id();
         double get_position_on_the_current_road();
-        vector<pair<int, double>> *get_route();
+        vector<long long int> *get_route();
         int get_current_road_number_in_the_route();
         double get_acceleration();
         double get_velocity();
