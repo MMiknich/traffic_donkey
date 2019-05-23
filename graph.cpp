@@ -340,7 +340,7 @@ graph* graph::normalize() {
 }
 
 double graph::getWeight(int roadID, counting_average_velocities *cav) {
-    assert(roadID >= this->roadID_recerved);
+    assert(roadID <= this->roadID_recerved);
     double lenght = this->getRoadptr(roadID)->get_length();
     double avrSpeed = cav[roadID].average_speed;
     return (lenght * avrSpeed);
