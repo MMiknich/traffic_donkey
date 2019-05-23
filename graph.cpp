@@ -345,7 +345,7 @@ double graph::getWeight(int roadID, counting_average_velocities *cav) {
     double length = this->getRoadptr(roadID)->get_length();
 
     double avrSpeed = cav[roadID].average_speed;
-    return (length * avrSpeed);
+    return (length / avrSpeed);
 }
 
 std::vector<lli> graph::findWay(int roadID_S, int roadID_T, counting_average_velocities *cav) {

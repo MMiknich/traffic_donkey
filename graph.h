@@ -58,7 +58,9 @@ public:
 
     lli getNumofVertexinp(lli Vertex_ID); // counts number of inter edges
     std::vector<lli> findWay(int roadID_S, int roadID_T, counting_average_velocities *cav); // no waaaay
+    std::vector<lli> possibleHomes();
     double getWeight( int roadID, counting_average_velocities *cav);  //size is G.roadID_received + 1
+
 
 
 
