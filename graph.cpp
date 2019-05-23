@@ -6,6 +6,7 @@
 #include <vector>
 #include <cassert>
 #include <limits>
+#include <random>
 
 graph::graph(lli *ListS, lli *ListT, double *ListWeight, lli list_size) {
 
@@ -340,10 +341,10 @@ graph* graph::normalize() {
 }
 
 double graph::getWeight(int roadID, counting_average_velocities *cav) {
-    assert(roadID >= this->roadID_recerved);
-    double lenght = this->getRoadptr(roadID)->get_length();
+    assert(roadID <= this->roadID_recerved);
+    double length = this->getRoadptr(roadID)->get_length();
     double avrSpeed = cav[roadID].average_speed;
-    return (lenght * avrSpeed);
+    return (length * avrSpeed);
 }
 
 std::vector<lli> graph::findWay(int roadID_S, int roadID_T, counting_average_velocities *cav) {
@@ -353,24 +354,25 @@ std::vector<lli> graph::findWay(int roadID_S, int roadID_T, counting_average_vel
     lli S_point = this->getEdge(roadID_S).first; //start point
     lli T_point = this->getEdge(roadID_T).second; //end point
 
-    std::vector<bool> visitedVert(this->graphModel.size()); //vector of visited Vertexes
-    std::vector<double> minLen(this->graphModel.size());    //vector of len from S to i
-    std::vector<std::vector<lli>> ways(this->graphModel.size()); //vector of ways
+    ///---====Deikstra1====---
+    std::vector<bool> visitedVert1(this->graphModel.size()); //vector of visited Vertexes
+    std::vector<double> vertexFactor1(this->graphModel.size());    //vector of vector numbers
+    std::vector<std::vector<lli>> ways1(this->graphModel.size()); //vector of ways
 
     // cleaning space
-    for (auto &&i : visitedVert) i = false;
-    for (auto &&a : minLen) a =  std::numeric_limits<double>::max();
-    for (auto a : ways ) a.clear();
+    for (auto &&i : visitedVert1) i = false;
+    for (auto &&a : vertexFactor1) a =  std::numeric_limits<double>::max();
     // --------------
 
     //filling starting information
-    for (auto a : *this->graphModel.at(S_point)) {
-        minLen[a->vertex] = this->getWeight(a->edgeRoad->get_road_id(), cav);
-        ways[a->vertex].push_back(a->edgeRoad->get_road_id());
-    }
+    for (auto a : *this->graphModel.at(S_point))
+        if(a->roadType == OUTPUT) {
+            vertexFactor1[a->vertex] = this->getWeight(a->edgeRoad->get_road_id(), cav);
+            ways1[a->vertex].push_back(a->edgeRoad->get_road_id());
+        }
 
-    visitedVert[S_point] = true;
-    minLen[S_point] = 0;
+    visitedVert1[S_point] = true;
+    vertexFactor1[S_point] = 0;
 
 
     lli gSize = this->graphModel.size();
@@ -378,36 +380,116 @@ std::vector<lli> graph::findWay(int roadID_S, int roadID_T, counting_average_vel
     for (int i = 1; i < gSize; i++) {
 
         lli nextVertex = -1;
-        double minWeght =  std::numeric_limits<double>::max();
+        double minWeight =  std::numeric_limits<double>::max();
 
 
-        /// --------------------
+        // --------------------
         for (auto j = 0; j < gSize; j++) {
-            if (!visitedVert[j] && minWeght <= minLen[j]) {
-                minWeght = minLen[j];
+            if (!visitedVert1[j] && minWeight > vertexFactor1[j]) {
+                minWeight = vertexFactor1[j];
                 nextVertex = j;
             }
         }
-        /// Found the next vertex
+        // Found the next vertex
 
-        visitedVert[nextVertex] = true;
+        if(nextVertex == -1) break;
+
+        visitedVert1[nextVertex] = true; //marking next vertex
         for (auto j = 0; j < this->graphModel[nextVertex]->size(); j++)
         {
-            if(minLen.at(this->graphModel[nextVertex]->at(j)->vertex) > (minLen[nextVertex] +
-            this->getWeight(this->graphModel[nextVertex]->at(j)->edgeRoad->get_road_id(), cav)))
-            {
-                minLen.at(this->graphModel[nextVertex]->at(j)->vertex) =
-                        minLen[nextVertex] +
-                        this->getWeight(this->graphModel[nextVertex]->at(j)->edgeRoad->get_road_id(), cav);
+            auto chEdge = this->graphModel[nextVertex]->at(j); // рассматириваемое ребро
+            auto rID = chEdge->edgeRoad->get_road_id();        // and it's road
 
-                ways[this->graphModel[nextVertex]->at(j)->vertex].clear();
-                ways[this->graphModel[nextVertex]->at(j)->vertex] = ways[nextVertex];
-                ways[this->graphModel[nextVertex]->at(j)->vertex].push_back(this->graphModel[nextVertex]->at(j)->edgeRoad->get_road_id());
+            if(vertexFactor1[chEdge->vertex] > vertexFactor1[nextVertex] + this->getWeight(rID, cav) && chEdge->roadType == OUTPUT) {
+                vertexFactor1[chEdge->vertex] = vertexFactor1[nextVertex] + this->getWeight(rID, cav);
+                ways1[chEdge->vertex].clear();
+                ways1[chEdge->vertex] = ways1[nextVertex];
+                ways1[chEdge->vertex].push_back(rID);
             }
         }
+
     }
 
-    return ways[T_point];
+
+    ///---==HardestWay==---
+    double maxWeight = -1;
+    lli hardestWay = -1;
+    for(auto a : ways1[T_point])
+        if(this->getWeight(a, cav) > maxWeight && this->getRoadptr(a)->get_priority() == 0)
+            hardestWay = a;
+
+
+
+    ///---====Deikstra2====---
+    std::vector<bool> visitedVert2(this->graphModel.size()); //vector of visited Vertexes
+    std::vector<double> vertexFactor2(this->graphModel.size());    //vector of vector numbers
+    std::vector<std::vector<lli>> ways2(this->graphModel.size()); //vector of ways
+
+    // cleaning space
+    for (auto &&i : visitedVert2) i = false;
+    for (auto &&a : vertexFactor2) a =  std::numeric_limits<double>::max();
+    // --------------
+
+    //filling starting information
+    for (auto a : *this->graphModel.at(S_point))
+        if(a->roadType == OUTPUT && a->edgeRoad->get_road_id() != hardestWay) {
+            vertexFactor2[a->vertex] = this->getWeight(a->edgeRoad->get_road_id(), cav);
+            ways2[a->vertex].push_back(a->edgeRoad->get_road_id());
+        }
+
+    visitedVert2[S_point] = true;
+    vertexFactor2[S_point] = 0;
+
+
+    lli gSize2 = this->graphModel.size();
+
+    for (int i = 1; i < gSize2; i++) {
+
+        lli nextVertex = -1;
+        double minWeght =  std::numeric_limits<double>::max();
+
+
+        // --------------------
+        for (auto j = 0; j < gSize2; j++) {
+            if (!visitedVert2[j] && minWeght > vertexFactor2[j]) { //TODO
+                minWeght = vertexFactor2[j];
+                nextVertex = j;
+            }
+        }
+        // Found the next vertex
+
+        if(nextVertex == -1) break;
+
+        visitedVert2[nextVertex] = true; //marking next vertex
+        for (auto j = 0; j < this->graphModel[nextVertex]->size(); j++)
+        {
+            auto chEdge = this->graphModel[nextVertex]->at(j); // рассматириваемое ребро
+            auto rID = chEdge->edgeRoad->get_road_id();        // and it's road
+
+            if(vertexFactor2[chEdge->vertex] > vertexFactor2[nextVertex] + this->getWeight(rID, cav)
+                && chEdge->roadType == OUTPUT
+                && rID != hardestWay) //ignoring the hardest way
+            {
+                vertexFactor2[chEdge->vertex] = vertexFactor2[nextVertex] + this->getWeight(rID, cav);
+                ways2[chEdge->vertex].clear();
+                ways2[chEdge->vertex] = ways2[nextVertex];
+                ways2[chEdge->vertex].push_back(rID);
+            }
+        }
+
+    }
+
+
+    if(vertexFactor2[T_point] != std::numeric_limits<double>::max())
+    {
+        int a = random()/RAND_MAX;
+        if (a > 0.5)
+            return ways1[T_point];
+        else
+            return ways2[T_point];
+    }else
+        return ways1[T_point];
+
 
 }
 

@@ -12,16 +12,28 @@
 extern int all_the_roads();
 int main()
 {
+//    lli A[4] = {0,0,1,2};
+//    lli B[4] = {1,2,3,3};
+//    double C[4] = {1,2,3,1};
+
    lli A[10] = {0,2,3,1,1,4,3,6,4, 3 };
    lli B[10] = {1,1,1,5,6,1,5,5,5, 4 };
-   double C[10] = {0.5,0.5,0.5,0.5,0.5,0.5,1,1,9,8};
+   double C[10] = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
 
    graph N(A, B, C, 10);
-   //N.print();
+   N.print();
    N.normalize();
     N.print();
-    lli G[18] = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10,  10, 10, 10, 10, 10,  10, 10, 10};
-    N.findWay(0, 15, G);
+    counting_average_velocities g[10];
+    for(int i = 0; i < 10; i++)
+    {
+        g[i].average_speed = 60;
+    }
+    vector<lli> G = N.findWay(0, 18, g);
+
+    return 0;
+
+    //N.findWay(0, 15, G);
 //   N.graphModel.insert(N.graphModel.begin() + 7, N.graphModel[0]);
 
 
