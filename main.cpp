@@ -23,16 +23,16 @@ int main(){
     int number_of_days = NUMBER_OF_DAYS;
     double average_times[number_of_days];
     long long int number_of_edges = 4;
-    long long int ListS[4] = {1, 2, 2, 2};
-    long long int ListT[4] = {2, 3, 4, 5};
+    long long int ListS[4] = {1, 2, 4, 2};
+    long long int ListT[4] = {2, 3, 2, 5};
     double length[4] = {100, 200, 300, 100};
 
 
     graph G(ListS, ListT, length, number_of_edges);
     G.normalize();
     counting_average_velocities average_velocities[G.roadID_recerved + 1];
-    vector<long long int> *possible_start_points = ;
-    int number_of_possible_start_points = possible_start_points->size();
+    vector<long long int> possible_start_points = G.possibleHomes();
+    unsigned long long int number_of_possible_start_points = possible_start_points.size();
     for(int i = 0; i <= G.roadID_recerved; i++){
         average_velocities[i].sum = 0;
         average_velocities[i].number_of_counts = 0;
@@ -47,12 +47,13 @@ int main(){
 //    route_t.push_back(G.getRoadID(8, 4));
 //    car *one_car= new car(1, 0, route_t, 0,0,0,0,0,0,0,0, 0, 0);
 //    (G.getRoadptr(G.getRoadID(1, 6))->get_cars_on_the_road())->push_back(one_car);
+
     int number_of_cars;
     scanf("%d", &number_of_cars);
     car * array_of_cars[number_of_cars];
     for(int j = 0; j < number_of_cars; j++){
-        int start = (*possible_start_points)[rand() * (number_of_possible_start_points - 1)/RAND_MAX];
-        int finish = (*possible_start_points)[rand() * (number_of_possible_start_points - 1)/RAND_MAX];
+        int start = possible_start_points[round(double((rand() * (number_of_possible_start_points - 1)))/RAND_MAX)];
+        int finish = round(double(rand() * (G.roadID_recerved))/RAND_MAX);
         printf("%d %d\n", start, finish);
         array_of_cars[j] = new car(j, 0, 0, 0, 0, 0, 0, 0, 0, 0, start, finish);
     }
