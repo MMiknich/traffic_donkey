@@ -318,16 +318,18 @@ graph* graph::normalize() {
     {
         if(vertex->size() == 3)
         {
-            int lowP_ID = 0;
-            for(int i = 0; i < 3; i++) lowP_ID = (vertex->at(i)->edgeRoad->get_priority() == 0 ? i : lowP_ID); //find low preor id
-            int inpHP = 0;
-            inpHP = vertex->at((lowP_ID + 1) % 3)->roadType == INPUT ? (lowP_ID + 1) % 3 : (lowP_ID + 2) % 3;
-
-            if (vertex->at(lowP_ID)->roadType == INPUT)
-            {
-                vertex->at(lowP_ID)->edgeRoad->set_relative_road_id_1(inpHP);
-                vertex->at(lowP_ID)->edgeRoad->set_relative_road_id_2(-1);
+            int lowP_ID = -1;
+            int inp_ID = -1;
+            for(auto a : *vertex) {
+                if(a->roadType == INPUT && a->edgeRoad->get_priority() == 0)
+                    lowP_ID = a->edgeRoad->get_road_id(); //find low preor id
+                else if(a->roadType == INPUT)
+                    inp_ID = a->edgeRoad->get_road_id();
             }
+            if(lowP_ID != -1)
+                this->getRoadptr(lowP_ID)->set_relative_road_id_1(inp_ID);
+            cout << lowP_ID <<"--"<<inp_ID<<" \n";
+
         }
         if(vertex->size() == 2)
         {
