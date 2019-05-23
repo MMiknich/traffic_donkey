@@ -345,7 +345,7 @@ double graph::getWeight(int roadID, counting_average_velocities *cav) {
     double length = this->getRoadptr(roadID)->get_length();
 
     double avrSpeed = cav[roadID].average_speed;
-    return (length * avrSpeed);
+    return (length / avrSpeed);
 }
 
 std::vector<lli> graph::findWay(int roadID_S, int roadID_T, counting_average_velocities *cav) {
@@ -492,6 +492,22 @@ std::vector<lli> graph::findWay(int roadID_S, int roadID_T, counting_average_vel
         return ways1[T_point];
 
 
+}
+
+std::vector<lli> graph::possibleHomes() {
+    vector<lli> output;
+
+    for(auto vertex : this->graphModel)
+    {
+        int flag = 0;
+        for(auto edge : *vertex) flag += edge->roadType == OUTPUT ? 0 : 1;
+
+        if(flag == 0)
+            for(auto edge : *vertex)
+                output.push_back(edge->edgeRoad->get_road_id());
+    }
+
+    return output;
 }
 
 
