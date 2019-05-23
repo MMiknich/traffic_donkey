@@ -31,6 +31,8 @@ int main(){
     graph G(ListS, ListT, length, number_of_edges);
     G.normalize();
     counting_average_velocities average_velocities[G.roadID_recerved + 1];
+    vector<long long int> *possible_start_points = ;
+    int number_of_possible_start_points = possible_start_points->size();
     for(int i = 0; i <= G.roadID_recerved; i++){
         average_velocities[i].sum = 0;
         average_velocities[i].number_of_counts = 0;
@@ -49,8 +51,8 @@ int main(){
     scanf("%d", &number_of_cars);
     car * array_of_cars[number_of_cars];
     for(int j = 0; j < number_of_cars; j++){
-        int start = rand() * (G.roadID_recerved + 1)/RAND_MAX;
-        int finish = rand() * (G.roadID_recerved + 1)/RAND_MAX;
+        int start = (*possible_start_points)[rand() * (number_of_possible_start_points - 1)/RAND_MAX];
+        int finish = (*possible_start_points)[rand() * (number_of_possible_start_points - 1)/RAND_MAX];
         printf("%d %d\n", start, finish);
         array_of_cars[j] = new car(j, 0, 0, 0, 0, 0, 0, 0, 0, 0, start, finish);
     }
@@ -58,7 +60,7 @@ int main(){
     for(int j = 0; j < number_of_days; j++){
         for(int k = 0; k < number_of_cars; k++){
             vector<long long int> way = G.findWay(array_of_cars[k]->get_start(), array_of_cars[k]->get_finish(), average_velocities);
-            if(way.size() != 0) {
+            if(way.empty() == 0) {
                 array_of_cars[k]->set_route(way);
                 (G.getRoadptr(array_of_cars[k]->get_start())->get_cars_on_the_road())->push_back(array_of_cars[k]);
                 array_of_cars[k]->set_position_on_the_current_road(
