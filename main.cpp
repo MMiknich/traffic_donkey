@@ -15,7 +15,11 @@
 #include <iomanip>
 #include <fstream>
 #define lli long long int
+<<<<<<< HEAD
 #define NUMBER_OF_DAYS 1;
+=======
+#define NUMBER_OF_DAYS 20;
+>>>>>>> 37cdac3392473196c5a1d74bc5150ed67d14c43e
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
@@ -23,12 +27,15 @@ using namespace std;
 extern double all_the_roads(int number_of_cars, graph * G, counting_average_velocities * average_velocities);
 int main(){
 
-
     FILE *fule;
     fule = fopen("Barcelona", "r+");
+    if (!fule)perror("fopen");
+
     lli Svertexes[2524];
     lli Tverexes[2524];
     double roadLenght[2524];
+
+
     for (int ilk = 0; ilk < 2523; ilk++) {
         int S, T, tr1;
         double len = 678, dtr1, dtr2,  tr2, tr3, tr4, tr5;
@@ -37,7 +44,10 @@ int main(){
         Tverexes[ilk]=T;
         roadLenght[ilk]=len*1000;
     }
+
     fclose(fule);
+
+
     int number_of_days = NUMBER_OF_DAYS;
     double average_times[number_of_days];
 
@@ -46,9 +56,11 @@ int main(){
 
 
     long long int number_of_edges = 2524;
+
 //    long long int ListS[25] = {0,0,1,1,6,6,6,9,6,8,5,2,2,5,4,4,3,3,5,11, 13,13,11,9,9};
 //    long long int ListT[25] = {1,2,6,2,7,5,9,8,8,5,8,5,3,3,3,12,12,11,11,8,11,12,12,13,10};
 //    double length[25] = {100, 200, 300, 100,1000, 180,400,800,650, 700, 1500, 687,688, 3000, 500, 670, 400, 2000, 1000, 678, 805, 767, 3456, 5678, 4566};
+
     graph G(Svertexes, Tverexes, roadLenght, number_of_edges);
     G.normalize();
     counting_average_velocities average_velocities[G.roadID_recerved + 1];
@@ -62,7 +74,9 @@ int main(){
     }
     int number_of_cars;
     int real_number_of_cars;
+
     printf("print number_of_cars:");
+
     scanf("%d", &number_of_cars);
     real_number_of_cars = number_of_cars;
 
@@ -84,7 +98,7 @@ int main(){
 
     for(int j = 0; j < number_of_days; j++){
         real_number_of_cars = number_of_cars;
-        cout << j << "\n";
+
         for(int k = 0; k < number_of_cars; k++){
             vector<long long int> way = G.findWay(array_of_cars[k]->get_start(), array_of_cars[k]->get_finish(), average_velocities);
             if(way.empty() == 0 && G.getEdge(way[way.size() - 1]).second == G.getEdge(array_of_cars[k]->get_finish()).second) {

@@ -31,6 +31,7 @@ double all_the_roads(int number_of_cars, graph * G, counting_average_velocities 
     double temp_value;
     road *r;
     road *next_r;
+
     int Iretator=0;
     cout<<"loading:\n";
     while(number_of_cars_reached_destination != number_of_cars) {
