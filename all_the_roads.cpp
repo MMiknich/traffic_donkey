@@ -8,7 +8,6 @@
 #include "road.h"
 #define lli long long int
 #define CRITICAL_DISTANCE 0.5
-#define CRITICAL_TIME_TO_MAKE_A_TURN 5.0;
 double all_the_roads(int number_of_cars, graph * G, counting_average_velocities * average_velocities)
 {
     int number_of_cars_reached_destination = 0;
@@ -30,42 +29,13 @@ double all_the_roads(int number_of_cars, graph * G, counting_average_velocities 
     double changed_velocity;
     double changed_position;
     double temp_value;
-
     road *r;
     road *next_r;
-
-//    vector<pair<int, double>> route_t;
-//    route_t.push_back(make_pair(G.getRoadID(1, 6), 0));
-//    route_t.push_back(make_pair(G.getRoadID(6, 7), 0));
-//    route_t.push_back(make_pair(G.getRoadID(7, 8), 0));
-//    route_t.push_back(make_pair(G.getRoadID(8, 4), 0));
-//    cout << G.getRoadID(1, 6) << " " << G.getRoadID(6, 7) << " " << G.getRoadID(7, 8) << " " << G.getRoadID(8, 4) <<  " " << G.getRoadID(8, 2) << "\n";
-//    car *one_car= new car(1, 0, route_t, 0,0,0,0,0,0,0,0, 0, 0);
-//    vector<pair<int, double>> route_t2;
-//    route_t2.push_back(make_pair(G.getRoadID(2, 6), 0));
-//    route_t2.push_back(make_pair(G.getRoadID(6, 7), 0));
-//    route_t2.push_back(make_pair(G.getRoadID(7, 3), 0));
-//    car *one_car2= new car(2, 0, route_t2, 0,0,0,0,0,0,0,0, 0, 0);
-//    G.getRoadptr(G.getRoadID(1, 6))->set_relative_road_id_1(G.getRoadID(2, 6));
-//    (G.getRoadptr(G.getRoadID(1, 6))->get_cars_on_the_road())->push_back(one_car);
-//    (G.getRoadptr(G.getRoadID(2, 6))->get_cars_on_the_road())->push_back(one_car2);
-//    FILE * file;
-//    file = fopen("out.txt", "w+");
-//    list<car> cars_on_the_road;
-//    vector<int> route;
-//    cars_on_the_road.insert(cars_on_the_road.end(), car(0, 1000, route, 0, 0, 0, 0, 0, 0, 0));
-//    for(int i = 1; i < N; i++){
-//        cars_on_the_road.insert(cars_on_the_road.end(), car(i, -100 * i, route, 0, 0, 0, 0, 0, 0, 0));
-//    }
-//    struct tms *start_times = (struct tms *) malloc(sizeof(struct tms));
-//    struct tms *finish_times = (struct tms *) malloc(sizeof(struct tms));
-//    struct result_times{
-//        double real;
-//        double user;
-//        double sys;
-//    };
-//    clock_t start = times(start_times);
+    int Iretator=0;
+    cout<<"loading:\n";
     while(number_of_cars_reached_destination != number_of_cars) {
+        Iretator++;
+        cout <<Iretator<<"*\n";
         total_time += delta_t;
         number_of_updates++;
         for(long long int edges_iterator = 0; edges_iterator <= G->roadID_recerved; edges_iterator++) {
@@ -271,7 +241,6 @@ double all_the_roads(int number_of_cars, graph * G, counting_average_velocities 
                 }
             }
         }
-        //cout << " " << one_car->get_changed_position_on_the_current_road() << " " << one_car->get_current_road_number_in_the_route() << " " << one_car->get_changed_current_road_number_in_the_route() << "\n";
         for(long long int edges_iterator = 0; edges_iterator <= G->roadID_recerved; edges_iterator++) {
             r = G->getRoadptr(edges_iterator);
             if(r->get_cars_on_the_road()->empty() == 0) {
@@ -300,24 +269,17 @@ double all_the_roads(int number_of_cars, graph * G, counting_average_velocities 
                         average_velocities[edges_iterator].sum += (*it)->get_velocity();
                         average_velocities[edges_iterator].number_of_counts++;
                     }
-                    printf("%d %lf %lf %lf %d\n", (*it)->get_car_id(), (*it)->get_position_on_the_current_road(),
-                           (*it)->get_velocity(),
-                           (*it)->get_acceleration(), (*it)->get_changed_current_road_number_in_the_route());
                 }
             }
         }
-
     }
     for(int i = 0; i <= G->roadID_recerved; i++){
-        //printf("%d %lf \n", i, average_velocities[i].average_speed);
         if(average_velocities[i].number_of_counts != 0){
             average_velocities[i].average_speed = average_velocities[i].sum / average_velocities[i].number_of_counts;
-            //printf("%d ", i);
         }
         //printf("%d %lf \n", i, average_velocities[i].average_speed);
     }
-    //delete(one_car);
     average_time = sum_time / number_of_cars;
-    printf("average_time %lf\n", average_time);
+    //printf("average_time %lf\n", average_time);
     return average_time;
 }
