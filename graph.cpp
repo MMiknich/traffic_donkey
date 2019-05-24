@@ -328,7 +328,6 @@ graph* graph::normalize() {
             }
             if(lowP_ID != -1)
                 this->getRoadptr(lowP_ID)->set_relative_road_id_1(inp_ID);
-            cout << lowP_ID <<"--"<<inp_ID<<" \n";
 
         }
         if(vertex->size() == 2)
